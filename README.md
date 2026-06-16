@@ -58,6 +58,12 @@ Pass values by defining the environment variables used in the command directives
 DRY_RUN=true RECONCILER_NAME=MyReconciler OPTIONAL_FIELDS=include go generate ./...
 ```
 
+Inspect debug output:
+
+```shell
+DRY_RUN=true DEBUG=true OPTIONAL_FIELDS=include go generate ./...
+```
+
 Save changes to disk:
 
 ```shell
