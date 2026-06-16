@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/christophrj/opencontrolplane-gen/logs"
+	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
 )
 
 // Prefix returns true if loc contains a comment starting with commandIdentifier

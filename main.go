@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/christophrj/opencontrolplane-gen/commands"
-	"github.com/christophrj/opencontrolplane-gen/logs"
-	"github.com/christophrj/opencontrolplane-gen/runner"
+	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
+	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
+	"github.com/christophrj/opencontrolplane-gen/pkg/runner"
 )
 
 func main() {

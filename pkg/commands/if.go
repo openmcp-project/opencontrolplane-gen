@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/christophrj/opencontrolplane-gen/logs"
+	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
 )
 
 const (

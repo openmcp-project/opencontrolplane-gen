@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/christophrj/opencontrolplane-gen/commands"
-	"github.com/christophrj/opencontrolplane-gen/runner"
+	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
+	"github.com/christophrj/opencontrolplane-gen/pkg/runner"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

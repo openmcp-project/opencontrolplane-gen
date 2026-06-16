@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/christophrj/opencontrolplane-gen/commands"
+	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
 )
 
 const ocpgenIdentifier = "go:generate opencontrolplane-gen"
