@@ -1,7 +1,7 @@
 package testdata
 
 type Example struct {
-	namespace string
+	namespace       string
 	conditionalName string
 	// test nested command
 	conditionalmyName int
