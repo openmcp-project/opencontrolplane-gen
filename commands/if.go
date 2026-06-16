@@ -15,13 +15,13 @@ const (
 var _ Command = &ifCommand{}
 
 // Activates on `//opencontrolplane-gen:if`.
-// Expects an env variable as parameter that holds a bool value.
-// e.g. `//opencontrolplane-gen:if ENV_FEATURE
-// where ENV_FEATURE = 'false' will result in any following line to be removed
+// Expects an assignment where an env variable value is compared with a string literal
+// e.g. `//opencontrolplane-gen:if ENV_VAR=somevalue
+// if the ENV_VAR lookup does not match the string literal, then any following line of code gets removed
 // until `//opencontrolplane-gen-fi` deactivates the command again.
 type ifCommand struct {
-	active    bool
-	condition bool
+	active      bool
+	includeLine bool
 }
 
 // NewIfCommand returns an ifCommand
@@ -31,27 +31,37 @@ func NewIfCommand() Command {
 
 // Execute implements [Command].
 func (r *ifCommand) Execute(loc string) string {
+	// enable command
 	if Prefix(loc, ocpIf) {
 		argAssignments := assignments(loc, ocpIf)
+		// exactly one assignment is expected
 		if len(argAssignments) != 1 {
 			logs.Debug(fmt.Sprintf("(%s) failed to parse (%s): invalid number of assignments", os.Getenv("GOFILE"), loc))
+			r.includeLine = false
+			return loc
+		}
+		value, ok := os.LookupEnv(argAssignments[0].left)
+		if !ok {
+			logs.Debug(fmt.Sprintf("(%s) failed to lookup env (%s) of (%s)", os.Getenv("GOFILE"), argAssignments[0].left, loc))
+			r.includeLine = false
 			return loc
 		}
 		r.active = true
-		r.condition = (os.Getenv(argAssignments[0].left) == argAssignments[0].right)
-		logs.Debug(fmt.Sprintf("ifCommand condition = %v", r.condition))
+		r.includeLine = (value == argAssignments[0].right)
+		logs.Debug(fmt.Sprintf("ifCommand includeLine = %v", r.includeLine))
 		logs.Debug(fmt.Sprintf("removed line: %s", loc))
 		// remove the opencontrolplane-gen comment as part of the processing
 		return ""
 	}
-	if Prefix(loc, ocpFi) {
+	// disable command
+	if Prefix(loc, ocpFi) && r.active {
 		r.active = false
-		r.condition = false
+		r.includeLine = false
 		logs.Debug(fmt.Sprintf("removed line: %s", loc))
 		// remove the opencontrolplane-gen comment as part of the processing
 		return ""
 	}
-	if r.active && !r.condition {
+	if r.active && !r.includeLine {
 		logs.Debug(fmt.Sprintf("removed line: %s", loc))
 		return ""
 	}

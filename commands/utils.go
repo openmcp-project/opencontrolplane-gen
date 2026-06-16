@@ -15,25 +15,31 @@ func Prefix(loc, commandIdentifier string) bool {
 	if !strings.HasPrefix(line, "//") {
 		return false
 	}
-	uncommentedCommand := uncomment(line)
+	uncommentedCommand := uncomment(loc)
 	return strings.HasPrefix(uncommentedCommand, commandIdentifier)
 }
 
 // uncomment removes the go comment part
 // e.g. '// opencontrolplane-gen:if a=b' returns 'opencontrolplane-gen:if a=b'
-func uncomment(line string) string {
-	return strings.TrimSpace(strings.TrimPrefix(line, "//"))
+func uncomment(loc string) string {
+	return strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(loc), "//"))
 }
 
 // trimCommand trims a command line to its arguments
 // e.g. '// opencontrolplane-gen:if a=b' returns 'a=b'
-func trimCommand(line, commandIdentifier string) string {
-	return strings.TrimSpace(strings.TrimPrefix(uncomment(strings.TrimSpace(line)), commandIdentifier))
+func trimCommand(loc, commandIdentifier string) string {
+	if !Prefix(loc, commandIdentifier) {
+		return loc
+	}
+	return strings.TrimSpace(strings.TrimPrefix(uncomment(loc), commandIdentifier))
 }
 
 // arguments retrieves the raw arguments
 // e.g. '// opencontrolplane-gen:if a=b c=d' returns '{"a=b", "c=d"}'
 func arguments(loc, commandIdentifier string) []string {
+	if !Prefix(loc, commandIdentifier) {
+		return []string{}
+	}
 	args := trimCommand(loc, commandIdentifier)
 	return strings.Split(args, " ")
 }

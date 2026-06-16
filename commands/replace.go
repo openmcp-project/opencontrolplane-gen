@@ -8,7 +8,7 @@ import (
 	"github.com/christophrj/opencontrolplane-gen/logs"
 )
 
-const ociReplace = "opencontrolplane-gen:replace"
+const ocpReplace = "opencontrolplane-gen:replace"
 
 var _ Command = &replaceCommand{}
 
@@ -33,8 +33,9 @@ func NewReplaceCommand() Command {
 
 // Execute implements [Command].
 func (r *replaceCommand) Execute(loc string) string {
-	if Prefix(loc, ociReplace) {
-		argAssignments := assignments(loc, ociReplace)
+	// enable command
+	if Prefix(loc, ocpReplace) {
+		argAssignments := assignments(loc, ocpReplace)
 		if len(argAssignments) < 1 {
 			logs.Debug(fmt.Sprintf("(%s) failed to parse (%s): invalid number of assignments", os.Getenv("GOFILE"), loc))
 			return loc
@@ -44,6 +45,8 @@ func (r *replaceCommand) Execute(loc string) string {
 			replace, ok := os.LookupEnv(a.right)
 			if !ok {
 				logs.Debug(fmt.Sprintf("(%s) failed to lookup env (%s) of (%s)", os.Getenv("GOFILE"), a.right, loc))
+				r.arguments = nil
+				return loc
 			}
 			r.arguments = append(r.arguments, searchAndReplace{search: a.left, replace: replace})
 		}
@@ -52,6 +55,7 @@ func (r *replaceCommand) Execute(loc string) string {
 		// remove the opencontrolplane-gen comment as part of the processing
 		return ""
 	}
+	// replace and disable command
 	if r.active {
 		original := loc
 		for _, arg := range r.arguments {
@@ -60,6 +64,7 @@ func (r *replaceCommand) Execute(loc string) string {
 		logs.Debug(fmt.Sprintf("(%s) replaced (%s) with (%s)", os.Getenv("GOFILE"), original, loc))
 		// replace is a one line command that instantly deactivates itself after processing a line of code
 		r.active = false
+		r.arguments = nil
 	}
 	return loc
 }
