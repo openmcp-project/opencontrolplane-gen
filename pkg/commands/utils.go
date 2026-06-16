@@ -52,7 +52,7 @@ func assignments(loc, commandIdentifier string) []assignment {
 	for _, a := range args {
 		pair := strings.SplitN(a, "=", 2)
 		if len(pair) != 2 {
-			logs.Debug(fmt.Sprintf("(%s) failed to parse (%s): invalid argument assignment", os.Getenv("GOFILE"), loc))
+			logs.Debug(fmt.Sprintf("failed to parse (%s): invalid argument assignment", loc))
 			return nil
 		}
 		assignments = append(assignments, assignment{left: pair[0], right: pair[1]})

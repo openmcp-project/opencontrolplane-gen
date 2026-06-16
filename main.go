@@ -18,7 +18,7 @@ func main() {
 	logs.Init(debug)
 
 	filepath := filepath.Join(os.Getenv("PWD"), os.Getenv("GOFILE"))
-	logs.Debug(fmt.Sprintf("opencontrolplane-gen called for file: %s", filepath))
+	logs.Debug("go:generate opencontrolplane-gen", fmt.Sprintf("opencontrolplane-gen called for file: %s", filepath))
 
 	runner := runner.Runner{
 		Commands: []commands.Command{

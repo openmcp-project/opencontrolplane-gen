@@ -36,20 +36,19 @@ func (r *ifCommand) Execute(loc string) string {
 		argAssignments := assignments(loc, ocpIf)
 		// exactly one assignment is expected
 		if len(argAssignments) != 1 {
-			logs.Debug(fmt.Sprintf("(%s) failed to parse (%s): invalid number of assignments", os.Getenv("GOFILE"), loc))
+			logs.Debug(ocpIf, fmt.Sprintf("failed to parse (%s): invalid number of assignments", loc))
 			r.includeLine = false
 			return loc
 		}
 		value, ok := os.LookupEnv(argAssignments[0].left)
 		if !ok {
-			logs.Debug(fmt.Sprintf("(%s) failed to lookup env (%s) of (%s)", os.Getenv("GOFILE"), argAssignments[0].left, loc))
+			logs.Debug(ocpIf, fmt.Sprintf("failed to lookup env (%s) of (%s)", argAssignments[0].left, loc))
 			r.includeLine = false
 			return loc
 		}
 		r.active = true
 		r.includeLine = (value == argAssignments[0].right)
-		logs.Debug(fmt.Sprintf("ifCommand includeLine = %v", r.includeLine))
-		logs.Debug(fmt.Sprintf("removed line: %s", loc))
+		logs.Debug(ocpIf, fmt.Sprintf("(%s) evaluated to %v: removed line", loc, r.includeLine))
 		// remove the opencontrolplane-gen comment as part of the processing
 		return ""
 	}
@@ -57,12 +56,12 @@ func (r *ifCommand) Execute(loc string) string {
 	if Prefix(loc, ocpFi) && r.active {
 		r.active = false
 		r.includeLine = false
-		logs.Debug(fmt.Sprintf("removed line: %s", loc))
+		logs.Debug(ocpFi, fmt.Sprintf("(%s): removed line", loc))
 		// remove the opencontrolplane-gen comment as part of the processing
 		return ""
 	}
 	if r.active && !r.includeLine {
-		logs.Debug(fmt.Sprintf("removed line: %s", loc))
+		logs.Debug(ocpFi, fmt.Sprintf("removed line: %s", loc))
 		return ""
 	}
 	return loc
