@@ -3,7 +3,7 @@ package testdata
 
 // opencontrolplane-gen:replace TestReconciler=RECONCILER_NAME
 type TestReconciler struct {
-	namespace string
+	namespace       string
 	//opencontrolplane-gen:if OPTIONAL_FIELDS=include
 	conditionalName string
 	// test nested command
