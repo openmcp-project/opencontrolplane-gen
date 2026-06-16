@@ -5,10 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
-	"github.com/christophrj/opencontrolplane-gen/pkg/runner"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/commands"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/runner"
 )
 
 func TestRunner_Run(t *testing.T) {

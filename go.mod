@@ -1,4 +1,4 @@
-module github.com/christophrj/opencontrolplane-gen
+module github.com/openmcp-project/opencontrolplane-gen
 
 go 1.26.3
 

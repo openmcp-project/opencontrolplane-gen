@@ -17,7 +17,7 @@ func Test_replaceCommand_Execute(t *testing.T) {
 		wantCommand  replaceCommand // expected command state post execution
 	}{
 		{
-			name: "test successfull activation with line removal",
+			name: "test successful activation with line removal",
 			command: replaceCommand{
 				active: false,
 			},
@@ -34,7 +34,7 @@ func Test_replaceCommand_Execute(t *testing.T) {
 				}}},
 		},
 		{
-			name: "test successfull activation with multiple arguments",
+			name: "test successful activation with multiple arguments",
 			command: replaceCommand{
 				active: false,
 			},

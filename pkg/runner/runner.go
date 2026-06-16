@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/commands"
 )
 
 const ocpgenIdentifier = "go:generate opencontrolplane-gen"
@@ -24,6 +24,11 @@ func (r *Runner) Run(fpath string) (result bytes.Buffer) {
 	if err != nil {
 		log.Fatalf("read file failed: %v", err)
 	}
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Fatalf("failed to close file: %v", err)
+		}
+	}()
 	fileScanner := bufio.NewScanner(file)
 	for fileScanner.Scan() {
 		original := fileScanner.Text()
@@ -38,12 +43,12 @@ func (r *Runner) Run(fpath string) (result bytes.Buffer) {
 		// add newline unless line should be removed
 		if original == loc || loc != "" {
 			if _, err := fmt.Fprintln(&result, loc); err != nil {
-				log.Fatalf("failed to write buffer: %v", err)
+				log.Printf("failed to write buffer: %v\n", err)
 			}
 		}
 	}
 	if err := fileScanner.Err(); err != nil {
-		log.Fatalf("failed to scan source file: %v", err)
+		log.Printf("failed to scan source file: %v\n", err)
 	}
 	return result
 }

@@ -17,7 +17,7 @@ func Test_ifCommand_Execute(t *testing.T) {
 		wantCommand  ifCommand // expected command state post execution
 	}{
 		{
-			name: "test successfull activation with line removal",
+			name: "test successful activation with line removal",
 			command: ifCommand{
 				active: false,
 			},

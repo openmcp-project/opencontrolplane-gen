@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
-	"github.com/christophrj/opencontrolplane-gen/pkg/commands"
-	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
-	"github.com/christophrj/opencontrolplane-gen/pkg/runner"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/commands"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/logs"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/runner"
 )
 
 func main() {
@@ -16,8 +17,8 @@ func main() {
 
 	logs.Init(debug)
 
-	filepath := os.Getenv("PWD") + "/" + os.Getenv("GOFILE")
-	logs.Debug(fmt.Sprintf("opencontrolplan-gen called for file: %s", filepath))
+	filepath := filepath.Join(os.Getenv("PWD"), os.Getenv("GOFILE"))
+	logs.Debug(fmt.Sprintf("opencontrolplane-gen called for file: %s", filepath))
 
 	runner := runner.Runner{
 		Commands: []commands.Command{

@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/logs"
 )
 
 // Prefix returns true if loc contains a comment starting with commandIdentifier
@@ -41,10 +41,10 @@ func arguments(loc, commandIdentifier string) []string {
 		return []string{}
 	}
 	args := trimCommand(loc, commandIdentifier)
-	return strings.Split(args, " ")
+	return strings.Fields(args)
 }
 
-// assignments retrieves the arguments as structured assigments
+// assignments retrieves the arguments as structured assignments
 // e.g. '// opencontrolplane-gen:if a=b c=d' returns '{{"left: a, right: b"}, {"left: c, right: d"}}'
 func assignments(loc, commandIdentifier string) []assignment {
 	args := arguments(loc, commandIdentifier)
@@ -60,6 +60,7 @@ func assignments(loc, commandIdentifier string) []assignment {
 	return assignments
 }
 
+// EvalBoolEnv parses the given envVar for literal "1" or "true"
 func EvalBoolEnv(envVar string) bool {
 	v := strings.ToLower(os.Getenv(envVar))
 	return v == "1" || v == "true"

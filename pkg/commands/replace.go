@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/christophrj/opencontrolplane-gen/pkg/logs"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/logs"
 )
 
 const ocpReplace = "opencontrolplane-gen:replace"
