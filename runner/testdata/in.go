@@ -4,7 +4,7 @@ package testdata
 // opencontrolplane-gen:replace TestReconciler=RECONCILER_NAME
 type TestReconciler struct {
 	namespace string
-	//opencontrolplane-gen:if OPTIONAL_FIELDS=include 
+	//opencontrolplane-gen:if OPTIONAL_FIELDS=include
 	conditionalName string
 	// test nested command
 	//opencontrolplane-gen:replace Replace=FIELD_NAME
