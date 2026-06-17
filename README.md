@@ -16,6 +16,14 @@ A `Runner` takes an abitrary number of `Commands` to transform individual go sou
 
 When nesting `Commands` in source files, be aware of the order that `Commands` are defined in the `Runner`.
 
+## Installation
+
+Use `go install` to get the latest version of `opencontrolplane-gen`:
+
+```shell
+go install github.com/openmcp-project/opencontrolplane-gen@latest
+```
+
 ## Usage
 
 `opencontrolplane-gen` is expected to be used with `go generate`, see the following example source code file:
