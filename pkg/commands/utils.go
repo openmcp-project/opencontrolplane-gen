@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/christophrj/opencontrolplane-gen/logs"
+	"github.com/openmcp-project/opencontrolplane-gen/pkg/logs"
 )
 
 // Prefix returns true if loc contains a comment starting with commandIdentifier
@@ -15,30 +15,36 @@ func Prefix(loc, commandIdentifier string) bool {
 	if !strings.HasPrefix(line, "//") {
 		return false
 	}
-	uncommentedCommand := uncomment(line)
+	uncommentedCommand := uncomment(loc)
 	return strings.HasPrefix(uncommentedCommand, commandIdentifier)
 }
 
 // uncomment removes the go comment part
 // e.g. '// opencontrolplane-gen:if a=b' returns 'opencontrolplane-gen:if a=b'
-func uncomment(line string) string {
-	return strings.TrimSpace(strings.TrimPrefix(line, "//"))
+func uncomment(loc string) string {
+	return strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(loc), "//"))
 }
 
 // trimCommand trims a command line to its arguments
 // e.g. '// opencontrolplane-gen:if a=b' returns 'a=b'
-func trimCommand(line, commandIdentifier string) string {
-	return strings.TrimSpace(strings.TrimPrefix(uncomment(strings.TrimSpace(line)), commandIdentifier))
+func trimCommand(loc, commandIdentifier string) string {
+	if !Prefix(loc, commandIdentifier) {
+		return loc
+	}
+	return strings.TrimSpace(strings.TrimPrefix(uncomment(loc), commandIdentifier))
 }
 
 // arguments retrieves the raw arguments
 // e.g. '// opencontrolplane-gen:if a=b c=d' returns '{"a=b", "c=d"}'
 func arguments(loc, commandIdentifier string) []string {
+	if !Prefix(loc, commandIdentifier) {
+		return []string{}
+	}
 	args := trimCommand(loc, commandIdentifier)
-	return strings.Split(args, " ")
+	return strings.Fields(args)
 }
 
-// assignments retrieves the arguments as structured assigments
+// assignments retrieves the arguments as structured assignments
 // e.g. '// opencontrolplane-gen:if a=b c=d' returns '{{"left: a, right: b"}, {"left: c, right: d"}}'
 func assignments(loc, commandIdentifier string) []assignment {
 	args := arguments(loc, commandIdentifier)
@@ -46,7 +52,7 @@ func assignments(loc, commandIdentifier string) []assignment {
 	for _, a := range args {
 		pair := strings.SplitN(a, "=", 2)
 		if len(pair) != 2 {
-			logs.Debug(fmt.Sprintf("(%s) failed to parse (%s): invalid argument assignment", os.Getenv("GOFILE"), loc))
+			logs.Debug(fmt.Sprintf("failed to parse (%s): invalid argument assignment", loc))
 			return nil
 		}
 		assignments = append(assignments, assignment{left: pair[0], right: pair[1]})
@@ -54,6 +60,7 @@ func assignments(loc, commandIdentifier string) []assignment {
 	return assignments
 }
 
+// EvalBoolEnv parses the given envVar for literal "1" or "true"
 func EvalBoolEnv(envVar string) bool {
 	v := strings.ToLower(os.Getenv(envVar))
 	return v == "1" || v == "true"
