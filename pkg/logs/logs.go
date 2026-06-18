@@ -8,9 +8,10 @@ import (
 
 var debugLogs bool
 
-// Init set global debug flag
+// Init sets global debug flag and logging to stdout instead of stderr
 func Init(debug bool) {
 	debugLogs = debug
+	log.SetOutput(os.Stdout)
 }
 
 // Debug logs based on global debug flag setting and prefixes any log entry with filename + command identifier.
