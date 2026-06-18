@@ -25,7 +25,7 @@ func TestRunner_Run(t *testing.T) {
 			envVariables: []testEnv{
 				{key: "RECONCILER_NAME", value: "Example"},
 				{key: "OPTIONAL_FIELDS", value: "include"},
-				{key: "FIELD_NAME", value: "myName"},
+				{key: "FIELD_VALUE", value: "Value"},
 				{key: "FIELD_NAMESPACE", value: "myNamespace"},
 			},
 			fpath: "testdata/in.go",

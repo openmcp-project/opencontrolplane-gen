@@ -5,11 +5,11 @@ type Example struct {
 
 	conditionalName string
 	// test nested command
-	conditionalmyName int
+	conditionalValue int
 }
 
 func (r *Example) Reconciler() {
-	var myName, myNamespace string
-	_ = myName
+	var Value, myNamespace string
+	_ = Value
 	_ = myNamespace
 }
