@@ -18,7 +18,7 @@ func main() {
 	logs.Init(debug)
 
 	filepath := filepath.Join(os.Getenv("PWD"), os.Getenv("GOFILE"))
-	log.Printf("opencontrolplane-gen called for file: %s", filepath)
+	logs.Debug("opencontrolplane-gen called for file: %s", filepath)
 
 	runner := runner.Runner{
 		Commands: []commands.Command{
@@ -32,7 +32,7 @@ func main() {
 		if err := os.WriteFile(filepath, result.Bytes(), 0644); err != nil {
 			log.Fatalf("failed to write to file: %v", err)
 		}
-		log.Printf("%s: saved changes\n", filepath)
+		logs.Stdout.Printf("saved changes: %s\n", filepath)
 		return
 	}
 
